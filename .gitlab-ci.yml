@@ -1,6 +1,6 @@
 stages:
   - build
-  - test
+  # - test
   - deploy
 
 variables:
@@ -11,15 +11,13 @@ api-build:
   stage: build
   image: $API_IMAGE
   script:
-    - cd api
     - go build
 
-api-unit-test:
-  stage: test
-  image: $API_IMAGE
-  script:
-    - cd api
-    - go test
+# api-unit-test:
+#   stage: test
+#   image: $API_IMAGE
+#   script:
+#     - go test
 
 # BATCH DEPLOY
 
