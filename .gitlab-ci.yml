@@ -19,7 +19,7 @@ api-build:
 #   script:
 #     - go test
 
-# BATCH DEPLOY
+# # BATCH DEPLOY
 
 deploy:
   stage: deploy
