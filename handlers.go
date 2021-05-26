@@ -24,6 +24,10 @@ import (
 // route handlers
 
 func getUserHandler(w http.ResponseWriter, r *http.Request) {
+	setupCORS(&w, r)
+	if (*r).Method == "OPTIONS" {
+		return
+	}
 
 	userEmail := r.URL.Query().Get("owner")
 	if userEmail == "" {
@@ -45,6 +49,10 @@ func getUserHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func indexHandler(w http.ResponseWriter, r *http.Request) {
+	setupCORS(&w, r)
+	if (*r).Method == "OPTIONS" {
+		return
+	}
 
 	var data jsonResponse
 	w.Header().Set("Content-Type", "application/json")
@@ -61,6 +69,10 @@ func indexHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func loginHandler(w http.ResponseWriter, r *http.Request) {
+	setupCORS(&w, r)
+	if (*r).Method == "OPTIONS" {
+		return
+	}
 
 	var newLoginReq loginReq
 	// decode data
@@ -109,6 +121,10 @@ func loginHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func createNewUserHandler(w http.ResponseWriter, r *http.Request) {
+	setupCORS(&w, r)
+	if (*r).Method == "OPTIONS" {
+		return
+	}
 
 	var newUser User
 	// decode data
@@ -139,6 +155,10 @@ func createNewUserHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func getAllAgency(w http.ResponseWriter, r *http.Request) {
+	setupCORS(&w, r)
+	if (*r).Method == "OPTIONS" {
+		return
+	}
 
 	agencyResp := make([]Agency, 0)
 
@@ -167,6 +187,10 @@ func getAllAgency(w http.ResponseWriter, r *http.Request) {
 }
 
 func getAllListingsHandler(w http.ResponseWriter, r *http.Request) {
+	setupCORS(&w, r)
+	if (*r).Method == "OPTIONS" {
+		return
+	}
 
 	listingsResp := make([]Listing, 0)
 
@@ -374,7 +398,10 @@ func getAllListingsHandler(w http.ResponseWriter, r *http.Request) {
 
 // almost identical logic with create and update (event sourcing)
 func addListing(w http.ResponseWriter, r *http.Request, isPutReq bool, listingToUpdate Listing, doNotDecode bool, isExcel bool) {
-
+	setupCORS(&w, r)
+	if (*r).Method == "OPTIONS" {
+		return
+	}
 	var listingToUse Listing
 
 	// decode data
@@ -509,6 +536,10 @@ func addListing(w http.ResponseWriter, r *http.Request, isPutReq bool, listingTo
 }
 
 func updateListingHandler(w http.ResponseWriter, r *http.Request) {
+	setupCORS(&w, r)
+	if (*r).Method == "OPTIONS" {
+		return
+	}
 
 	//check if listing already exists to update
 	putID, unescapeErr := url.QueryUnescape(mux.Vars(r)["id"]) //is actually Listing.Name, not __key__ in Datastore
@@ -600,6 +631,10 @@ func updateListingHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func createNewListingHandler(w http.ResponseWriter, r *http.Request) {
+	setupCORS(&w, r)
+	if (*r).Method == "OPTIONS" {
+		return
+	}
 
 	var myListing Listing
 	// decode data
@@ -663,6 +698,10 @@ func createNewListingHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func getOwnerNumberHandler(w http.ResponseWriter, r *http.Request) {
+	setupCORS(&w, r)
+	if (*r).Method == "OPTIONS" {
+		return
+	}
 
 	accountSid := "ACa59451c872071e8037cf59811057fd21"
 	authToken := "3b6a2f39bb05f5214283ef7bd6db973f"
@@ -693,6 +732,10 @@ func getOwnerNumberHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func createNewListingsExcel(w http.ResponseWriter, r *http.Request) {
+	setupCORS(&w, r)
+	if (*r).Method == "OPTIONS" {
+		return
+	}
 
 	agencyID := r.URL.Query().Get("agencyID")
 	user := r.URL.Query().Get("user")
