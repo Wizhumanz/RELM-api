@@ -1,67 +1,67 @@
-stages:
-  - build
-  - test
-  - deploy
+# stages:
+#   - build
+#   - test
+#   - deploy
 
-variables:
-  FRONTEND_IMAGE: node:lts-alpine3.13
-  API_IMAGE: golang:1.15
-  GCLOUD_PROJECT_ID: myika-relm
+# variables:
+#   FRONTEND_IMAGE: node:lts-alpine3.13
+#   API_IMAGE: golang:1.15
+#   GCLOUD_PROJECT_ID: myika-relm
 
-# FRONTEND
+# # FRONTEND
 
-frontend-build:
-  stage: build
-  only:
-    - /frontend-.*/
-  image: $FRONTEND_IMAGE
-  script:
-    - cd frontend
-    - npm install
-    - npm run-script build
+# frontend-build:
+#   stage: build
+#   only:
+#     - /frontend-.*/
+#   image: $FRONTEND_IMAGE
+#   script:
+#     - cd frontend
+#     - npm install
+#     - npm run-script build
 
-frontend-unit-test:
-  stage: test
-  only:
-    - /frontend-.*/
-  image: $FRONTEND_IMAGE
-  script:
-    - cd frontend
-    - npm run test
+# frontend-unit-test:
+#   stage: test
+#   only:
+#     - /frontend-.*/
+#   image: $FRONTEND_IMAGE
+#   script:
+#     - cd frontend
+#     - npm run test
 
-# GOLANG API
+# # GOLANG API
 
-api-build:
-  stage: build
-  only:
-    - /api-.*/
-  image: $API_IMAGE
-  script:
-    - cd api
-    - go build
+# api-build:
+#   stage: build
+#   only:
+#     - /api-.*/
+#   image: $API_IMAGE
+#   script:
+#     - cd api
+#     - go build
 
-api-unit-test:
-  stage: test
-  only:
-    - /api-.*/
-  image: $API_IMAGE
-  script:
-    - cd api
-    - go test
+# api-unit-test:
+#   stage: test
+#   only:
+#     - /api-.*/
+#   image: $API_IMAGE
+#   script:
+#     - cd api
+#     - go test
 
-# BATCH DEPLOY
+# # BATCH DEPLOY
 
-deploy:
-  stage: deploy
-  rules:
-    - if: '$CI_COMMIT_BRANCH == "production"'
-  image: gcr.io/google.com/cloudsdktool/cloud-sdk:latest
-  script:
-    - gcloud auth activate-service-account --key-file=$GCLOUD_KEY
-    - gcloud config set project $GCLOUD_PROJECT_ID
-    - cd api
-    - gcloud builds submit --tag gcr.io/$GCLOUD_PROJECT_ID/api-$CI_COMMIT_SHORT_SHA
-    - gcloud beta run deploy relm-api --image gcr.io/$GCLOUD_PROJECT_ID/api-$CI_COMMIT_SHORT_SHA --port 8000 --platform managed --min-instances 0 --max-instances 3 --allow-unauthenticated --region asia-southeast1 --memory 128Mi --cpu 1 --concurrency 5 --timeout 1000
-    - cd ../frontend
-    - gcloud builds submit --tag gcr.io/$GCLOUD_PROJECT_ID/frontend-$CI_COMMIT_SHORT_SHA
-    - gcloud beta run deploy relm-app --image gcr.io/$GCLOUD_PROJECT_ID/frontend-$CI_COMMIT_SHORT_SHA --port 3000 --platform managed --min-instances 0 --max-instances 3 --allow-unauthenticated --region asia-southeast1 --memory 128Mi --cpu 1 --concurrency 5 --timeout 3000
+# deploy:
+#   stage: deploy
+#   rules:
+#     - if: '$CI_COMMIT_BRANCH == "production"'
+#   image: gcr.io/google.com/cloudsdktool/cloud-sdk:latest
+#   script:
+#     - gcloud auth activate-service-account --key-file=$GCLOUD_KEY
+#     - gcloud config set project $GCLOUD_PROJECT_ID
+#     - cd api
+#     - gcloud builds submit --tag gcr.io/$GCLOUD_PROJECT_ID/api-$CI_COMMIT_SHORT_SHA
+#     - gcloud beta run deploy relm-api --image gcr.io/$GCLOUD_PROJECT_ID/api-$CI_COMMIT_SHORT_SHA --port 8000 --platform managed --min-instances 0 --max-instances 3 --allow-unauthenticated --region asia-southeast1 --memory 128Mi --cpu 1 --concurrency 5 --timeout 1000
+#     - cd ../frontend
+#     - gcloud builds submit --tag gcr.io/$GCLOUD_PROJECT_ID/frontend-$CI_COMMIT_SHORT_SHA
+#     - gcloud beta run deploy relm-app --image gcr.io/$GCLOUD_PROJECT_ID/frontend-$CI_COMMIT_SHORT_SHA --port 3000 --platform managed --min-instances 0 --max-instances 3 --allow-unauthenticated --region asia-southeast1 --memory 128Mi --cpu 1 --concurrency 5 --timeout 3000

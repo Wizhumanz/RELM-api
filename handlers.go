@@ -292,7 +292,7 @@ func getAllListingsHandler(w http.ResponseWriter, r *http.Request) {
 		indexOfStartID := GetIndex(listingsResp, func(l Listing) bool {
 			return l.KEY == startAtID
 		})
-		imgFetchListings = listingsResp[indexOfStartID:]
+		imgFetchListings = listingsResp[indexOfStartID : indexOfStartID+4]
 	} else if len(listingsResp) > 0 {
 		respLen := len(listingsResp)
 		if respLen > 4 {
